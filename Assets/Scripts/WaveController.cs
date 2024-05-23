@@ -44,6 +44,7 @@ public class WaveController : MonoBehaviour
     private List<GameObject> _endSpawnMarkers;
     private List<WaveLine> _waveLines;
     private List<int> _lockedMarkers;
+    private List<WaveSettings> _waveSettingsList;
     
     
     // Lines
@@ -56,7 +57,8 @@ public class WaveController : MonoBehaviour
     public float lineDiameter = 2; // thickness of lines
     // to add: line texture; 
     
-    // Waves
+    
+    // Waves Global Settings
     public float waveSpeed; // how fast the wave travels 
     public float waveAmplitude; // distance from center to max extent
     public float waveLength; // length of one wave 
@@ -72,7 +74,13 @@ public class WaveController : MonoBehaviour
     }
 
     private void Start()
-    { 
+    {
+        SpawnEverything();
+   
+    }
+
+    private void SpawnEverything()
+    {
         DetermineStartEndPoints();
 
         if (spawnStartEndMarkers)
@@ -92,33 +100,48 @@ public class WaveController : MonoBehaviour
         UpdateSpawnMarkers();
     }
 
-    private void UpdateSpawnMarkers()
+    public void MakeLineChange()
     {
-        foreach (var marker in _startSpawnMarkers)
-        {
-            int index = _startSpawnMarkers.IndexOf(marker);
-            if (selectedLineIndex == index)
-                marker.GetComponent<SpawnMarker>().SetMaterial(selectedMarkerMaterial);
-            else if (_lockedMarkers.Contains(index))
-                marker.GetComponent<SpawnMarker>().SetMaterial(lockedMarkerMaterial);
-            else
-                marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial);
+        DestroyStartMarkers();
+        DestroyWaveLines();
+        SpawnEverything();
+    }
 
-            
+    public void MakeWaveChange()
+    {
+        foreach (var waveLine in _waveLines)
+        {
+            int index = _waveLines.IndexOf(waveLine);
+            waveLine.LoadWaveSettings(_waveSettingsList[index] );
         }
     }
 
+  
+
+    private void DestroyStartMarkers()
+    {
+        foreach (var marker in _startSpawnMarkers)
+            if (marker != null)
+                Destroy(marker.gameObject);
+        _startSpawnMarkers = new List<GameObject>();
+    }
+    private void DestroyWaveLines()
+    {
+        foreach (var line in _waveLines)
+            if (line != null)
+                Destroy(line.gameObject);
+        _waveLines = new List<WaveLine>();
+        _waveSettingsList = new List<WaveSettings>();
+    }
 
     private void SpawnWaves()
     { 
         SpawnWaveLines();
         ConfigureWaveLines();
-    }
-
-
-
+    } 
     private void SpawnWaveLines()
     {
+        _waveSettingsList = new List<WaveSettings>();
         _waveLines = new List<WaveLine>();
         foreach (var vector3 in _startEndPoints.Keys)
             SpawnWaveLine(vector3,_startEndPoints[vector3] );
@@ -141,8 +164,10 @@ public class WaveController : MonoBehaviour
             int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
 
             WaveLine waveLine = _waveLines[index];
-            waveLine.Initialize(index,pointCount, vector3,_startEndPoints [vector3] );
-            waveLine.LoadWaveSettings(waveSpeed, waveAmplitude, waveLength, lineLength); 
+            waveLine.Initialize(index,pointCount, vector3,_startEndPoints [vector3], lineLength );
+            WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
+            waveLine.LoadWaveSettings(waveSettings); 
+            _waveSettingsList.Add(waveSettings);
         }
        
     }
@@ -183,4 +208,18 @@ public class WaveController : MonoBehaviour
             _endSpawnMarkers.Add(endSpawn);*/
         }
     }
+    private void UpdateSpawnMarkers()
+    {
+        foreach (var marker in _startSpawnMarkers)
+        {
+            int index = _startSpawnMarkers.IndexOf(marker);
+            if (selectedLineIndex == index)
+                marker.GetComponent<SpawnMarker>().SetMaterial(selectedMarkerMaterial);
+            else if (_lockedMarkers.Contains(index))
+                marker.GetComponent<SpawnMarker>().SetMaterial(lockedMarkerMaterial);
+            else
+                marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial); 
+        }
+    }
+
 }

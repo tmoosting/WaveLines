@@ -15,11 +15,12 @@ public class WaveLine : MonoBehaviour
     private bool _waving = false;
  
  
-    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition)
+    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition,  float length)
     {
         _lineRenderer = GetComponent<LineRenderer>();
         lineIndex = index;
         pointCount = positionCount;
+        lineLength = length;
 
         // Calculate positions based on start and end points
         _positions = new Vector3[positionCount];
@@ -30,12 +31,11 @@ public class WaveLine : MonoBehaviour
         }
         _lineRenderer.positionCount = positionCount;
     }
-    public void LoadWaveSettings(float waveSpeed, float waveAmplitude, float wavLength, float linLength)
+    public void LoadWaveSettings(WaveSettings waveSettings)
     {
-        speed = waveSpeed;
-        amplitude = waveAmplitude;
-        waveLength = wavLength;
-        lineLength = linLength;
+        speed = waveSettings.waveSpeed;
+        amplitude = waveSettings.waveAmplitude;
+        waveLength = waveSettings.waveLength;
         _waving = true;
     }
     

@@ -13,12 +13,14 @@ public class ControlUI : MonoBehaviour
     // lineAmount: slider
     // lineHorizontalSpacing: slider
     // lineVerticalSpacing: slider
+    // linelength: slider
+    // linediameter: slider
+    
     
     // Global Lines (applies to unlocked only)
     // button: unlock all
     
-    // linelength: slider
-    // linediameter: slider
+
     // speed   slider
     // amplitude  slider
     // wavelength  slider
