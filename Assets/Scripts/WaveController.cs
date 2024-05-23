@@ -216,7 +216,7 @@ public class WaveController : MonoBehaviour
             int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
 
             WaveLine waveLine = _waveLines[index];
-            waveLine.Initialize(index,pointCount, vector3,_startEndPoints [vector3], lineLength );
+            waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineLength );
             WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
             waveLine.LoadWaveSettings(waveSettings); 
             _waveSettingsList.Add(waveSettings);
@@ -233,33 +233,35 @@ public class WaveController : MonoBehaviour
         Vector3 startPoint = new Vector3(0, baseHeight, 0);
         Vector3 endPoint = new Vector3(0, baseHeight, lineLength);
         _startEndPoints.Add(startPoint, endPoint);
+
+        // Ensure correct calculation of subsequent start and end points based on spacing
         for (int i = 1; i < lineAmount; i++)
         {
-            Vector3 nextLineStartPoint = startPoint+ new Vector3(i * lineHorizontalSpacing, i * lineVerticalSpacing, 0);
-            Vector3 nextLineEndPoint = endPoint+ new Vector3(i * lineHorizontalSpacing, i * lineVerticalSpacing, 0); 
+            // Calculate the new start point by applying the correct spacing
+            Vector3 nextLineStartPoint = new Vector3(startPoint.x + i * lineHorizontalSpacing, startPoint.y + i * lineVerticalSpacing, startPoint.z);
+            Vector3 nextLineEndPoint = new Vector3(nextLineStartPoint.x, nextLineStartPoint.y, nextLineStartPoint.z + lineLength);
             _startEndPoints.Add(nextLineStartPoint, nextLineEndPoint);
         }
-        
-    } 
+    }
+
+
     private void SpawnStartMarkers()
     {
         _lockedMarkers = new List<int>();
         _startSpawnMarkers = new List<GameObject>();
         _endSpawnMarkers = new List<GameObject>();
-        foreach (var vector3 in _startEndPoints.Keys)
+
+        foreach (var startPosition in _startEndPoints.Keys)
         {
-            int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
+            int index = _startEndPoints.Keys.ToList().IndexOf(startPosition);
             GameObject startSpawn = Instantiate(spawnMarkerStartPrefab);
-            startSpawn.transform.position = new Vector3(vector3.x, vector3.y + 0.0f, vector3.z);
+            startSpawn.transform.position = startPosition; // Ensure marker uses the correct start position
             SpawnMarker marker = startSpawn.GetComponent<SpawnMarker>();
             marker.Initialize(index); 
             _startSpawnMarkers.Add(startSpawn);
-            
-            /*GameObject endSpawn = Instantiate(spawnMarkerEndPrefab);
-            endSpawn.transform.position = _startEndPoints[vector3];
-            _endSpawnMarkers.Add(endSpawn);*/
         }
     }
+
     private void UpdateSpawnMarkers()
     {
         foreach (var marker in _startSpawnMarkers)

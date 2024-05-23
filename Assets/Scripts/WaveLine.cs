@@ -15,7 +15,7 @@ public class WaveLine : MonoBehaviour
     private bool _waving = false;
  
  
-    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition,  float length)
+    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition, float length)
     {
         _lineRenderer = GetComponent<LineRenderer>();
         lineIndex = index;

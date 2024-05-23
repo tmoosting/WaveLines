@@ -559,7 +559,7 @@ MonoBehaviour:
   baseHeight: 2
   lineAmount: 6
   lineHorizontalSpacing: 2
-  lineVerticalSpacing: 0.25
+  lineVerticalSpacing: 0.5
   lineLength: 10
   lineDiameter: 2
   waveSpeed: 1
