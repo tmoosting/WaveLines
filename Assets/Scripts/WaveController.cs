@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Timeline;
@@ -64,7 +65,12 @@ public class WaveController : MonoBehaviour
     
     // Settings
     public bool spawnStartEndMarkers;
-    
+    public float speedMinValue = 0.01f;
+    public float speedMaxValue = 5f;
+    public float amplitudeMinValue = 0.01f;
+    public float amplitudeMaxValue = 5f;
+    public float wavelengthMinValue = 0.01f;
+    public float wavelengthMaxValue = 5f;
     
     private void Awake()
     {
@@ -99,31 +105,34 @@ public class WaveController : MonoBehaviour
     }
     public void SetGlobalWaveSpeed(float evtNewValue)
     {
+        waveSpeed = evtNewValue;
         foreach (var waveSettings in _waveSettingsList)
         {
             int index = _waveSettingsList.IndexOf(waveSettings);
             if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveSpeed = evtNewValue;  
+                _waveSettingsList[index].waveSpeed = waveSpeed;  
         }
         MakeWaveChange();
     }
     public void SetGlobalWaveAmplitude(float evtNewValue)
     {
+        waveAmplitude = evtNewValue;
         foreach (var waveSettings in _waveSettingsList)
         {
             int index = _waveSettingsList.IndexOf(waveSettings);
             if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveAmplitude = evtNewValue;  
+                _waveSettingsList[index].waveAmplitude = waveAmplitude;  
         }
         MakeWaveChange(); 
     }
     public void SetGlobalWaveWavelength(float evtNewValue)
     {
+        waveLength = evtNewValue;
         foreach (var waveSettings in _waveSettingsList)
         {
             int index = _waveSettingsList.IndexOf(waveSettings);
             if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveLength = evtNewValue;  
+                _waveSettingsList[index].waveLength = waveLength;  
         }
         MakeWaveChange(); 
     }
@@ -267,8 +276,10 @@ public class WaveController : MonoBehaviour
 
 
 
-    public WaveSettings GetWaveSettingsForIndex(int index)
+    public WaveSettings GetWaveSettingsForIndex(int index = 99)
     {
+        if (index == 99)
+            return _waveSettingsList[selectedLineIndex];
         return _waveSettingsList[index];
     }
 
