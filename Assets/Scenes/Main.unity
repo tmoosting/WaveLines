@@ -561,7 +561,7 @@ MonoBehaviour:
   lineHorizontalSpacing: 2
   lineVerticalSpacing: 0.5
   lineLength: 10
-  lineDiameter: 2
+  lineDiameter: 0.25
   waveSpeed: 1
   waveAmplitude: 1
   waveLength: 2

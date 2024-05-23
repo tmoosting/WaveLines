@@ -7,15 +7,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
-// To Do
+// To Do 
+// setup UI and refresh
+// file export, import in data ui
    
-// update ui based on current wave settings
-
-// linecolors: one for unlocked; one for selected; one for locked
-
-// global vs individual lines
-// Connect UI to variables below
-// preset file save system - external import/export for webgl
 
 
 public class WaveController : MonoBehaviour
@@ -216,7 +211,7 @@ public class WaveController : MonoBehaviour
             int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
 
             WaveLine waveLine = _waveLines[index];
-            waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineLength );
+            waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLength   );
             WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
             waveLine.LoadWaveSettings(waveSettings); 
             _waveSettingsList.Add(waveSettings);

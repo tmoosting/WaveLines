@@ -15,7 +15,8 @@ public class WaveLine : MonoBehaviour
     private bool _waving = false;
  
  
-    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition, float length)
+    public void Initialize(int index, int positionCount, Vector3 startPosition, Vector3 endPosition, float diameter,
+        float length)
     {
         _lineRenderer = GetComponent<LineRenderer>();
         lineIndex = index;
@@ -30,6 +31,8 @@ public class WaveLine : MonoBehaviour
             _positions[i] = Vector3.Lerp(startPosition, endPosition, t);
         }
         _lineRenderer.positionCount = positionCount;
+        _lineRenderer.startWidth = diameter;
+        _lineRenderer.endWidth = diameter;
     }
     public void LoadWaveSettings(WaveSettings waveSettings)
     {
