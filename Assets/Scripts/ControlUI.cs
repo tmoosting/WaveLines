@@ -18,13 +18,11 @@ public class ControlUI : MonoBehaviour
     
     
     // Global Lines (applies to unlocked only)
-    // button: unlock all
-    
-
+    // button: unlock all 
     // speed   slider
     // amplitude  slider
     // wavelength  slider
-
+    // min max values for three wave settings? 
    
  
     // Specific Line - can be locked to exclude from global sliders
@@ -175,26 +173,120 @@ public class ControlUI : MonoBehaviour
         return returnElement;
     }
 
+    private SpecialSlider _lineGlobalSpeedSlider;
+    private SpecialSlider _lineGlobalAmplitudeSlider;
+    private SpecialSlider _lineGlobalWavelengthSlider;
+    
     private VisualElement BuildGlobalContent()
     {
         VisualElement returnElement = new VisualElement();
         returnElement.style.width = Length.Percent(100);
-        returnElement.style.height = Length.Percent(100);
-      //  returnElement.style.backgroundColor = Color.white;
+        returnElement.style.height = Length.Percent(100); 
 
+        _lineGlobalSpeedSlider = new SpecialSlider
+        {
+            label = "Speed",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineGlobalSpeedSlider.RegisterValueChangedCallback(ChangeGlobalSpeedSliderValue);
+        returnElement.Add(_lineGlobalSpeedSlider);
+        
+        _lineGlobalAmplitudeSlider = new SpecialSlider
+        {
+            label = "Amplitude",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineGlobalAmplitudeSlider.RegisterValueChangedCallback(ChangeGlobalAmplitudeSliderValue);
+        returnElement.Add(_lineGlobalAmplitudeSlider);
+        
+        _lineGlobalWavelengthSlider = new SpecialSlider
+        {
+            label = "Wavelength",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineGlobalWavelengthSlider.RegisterValueChangedCallback(ChangeGlobalWavelengthSliderValue);
+        returnElement.Add(_lineGlobalWavelengthSlider);
         
         return returnElement;
     }
+    
+    
+    private void ChangeGlobalSpeedSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetGlobalWaveSpeed(evt.newValue);
+    }
+   
+    private void ChangeGlobalAmplitudeSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetGlobalWaveAmplitude(evt.newValue);
 
+    }
+    private void ChangeGlobalWavelengthSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetGlobalWaveWavelength(evt.newValue);
+
+    }
+
+    private SpecialSlider _lineSpeedSlider;
+    private SpecialSlider _lineAmplitudeSlider;
+    private SpecialSlider _lineWavelengthSlider;
+    
     private VisualElement BuildLineContent()
     {
         VisualElement returnElement = new VisualElement();
         returnElement.style.width = Length.Percent(100);
         returnElement.style.height = Length.Percent(100);
-
-        returnElement.style.backgroundColor = Color.yellow;
-
+        
+        _lineSpeedSlider = new SpecialSlider
+        {
+            label = "Speed",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineSpeedSlider.RegisterValueChangedCallback(ChangeSpeedSliderValue);
+        returnElement.Add(_lineSpeedSlider);
+        
+        _lineAmplitudeSlider = new SpecialSlider
+        {
+            label = "Amplitude",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineAmplitudeSlider.RegisterValueChangedCallback(ChangeAmplitudeSliderValue);
+        returnElement.Add(_lineAmplitudeSlider);
+        
+        _lineWavelengthSlider = new SpecialSlider
+        {
+            label = "Wavelength",
+            value = 1,
+            lowValue = 0.1f,
+            highValue = 15f
+        };
+        _lineWavelengthSlider.RegisterValueChangedCallback(ChangeWavelengthSliderValue);
+        returnElement.Add(_lineWavelengthSlider);
+        
         return returnElement;
+    }
+    
+    private void ChangeSpeedSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetWaveSpeed(evt.newValue);
+    }
+    private void ChangeAmplitudeSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetWaveAmplitude(evt.newValue);
+    }
+    private void ChangeWavelengthSliderValue(ChangeEvent<float> evt)
+    {
+        WaveController.Instance.SetWaveWavelength(evt.newValue);
     }
 
     private VisualElement BuildDataContent()

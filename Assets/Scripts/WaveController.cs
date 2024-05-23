@@ -7,10 +7,8 @@ using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 // To Do
-  
-// selected waveline logic
-// ui with:
-// global, selected line
+   
+// update ui based on current wave settings
 
 // linecolors: one for unlocked; one for selected; one for locked
 
@@ -99,7 +97,52 @@ public class WaveController : MonoBehaviour
         controlUI.RefreshWindow(3  );
         UpdateSpawnMarkers();
     }
-
+    public void SetGlobalWaveSpeed(float evtNewValue)
+    {
+        foreach (var waveSettings in _waveSettingsList)
+        {
+            int index = _waveSettingsList.IndexOf(waveSettings);
+            if (_lockedMarkers.Contains(index) == false) 
+                _waveSettingsList[index].waveSpeed = evtNewValue;  
+        }
+        MakeWaveChange();
+    }
+    public void SetGlobalWaveAmplitude(float evtNewValue)
+    {
+        foreach (var waveSettings in _waveSettingsList)
+        {
+            int index = _waveSettingsList.IndexOf(waveSettings);
+            if (_lockedMarkers.Contains(index) == false) 
+                _waveSettingsList[index].waveAmplitude = evtNewValue;  
+        }
+        MakeWaveChange(); 
+    }
+    public void SetGlobalWaveWavelength(float evtNewValue)
+    {
+        foreach (var waveSettings in _waveSettingsList)
+        {
+            int index = _waveSettingsList.IndexOf(waveSettings);
+            if (_lockedMarkers.Contains(index) == false) 
+                _waveSettingsList[index].waveLength = evtNewValue;  
+        }
+        MakeWaveChange(); 
+    }
+    public void SetWaveSpeed(float evtNewValue)
+    {
+        _waveSettingsList[selectedLineIndex].waveSpeed = evtNewValue;
+        MakeWaveChange();
+    }
+    public void SetWaveAmplitude(float evtNewValue)
+    {
+        _waveSettingsList[selectedLineIndex].waveAmplitude = evtNewValue;
+        MakeWaveChange();
+    }
+    public void SetWaveWavelength(float evtNewValue)
+    {
+        _waveSettingsList[selectedLineIndex].waveLength = evtNewValue;
+        MakeWaveChange();
+    }
+    
     public void MakeLineChange()
     {
         DestroyStartMarkers();
@@ -220,6 +263,13 @@ public class WaveController : MonoBehaviour
             else
                 marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial); 
         }
+    }
+
+
+
+    public WaveSettings GetWaveSettingsForIndex(int index)
+    {
+        return _waveSettingsList[index];
     }
 
 }
