@@ -283,4 +283,24 @@ public class WaveController : MonoBehaviour
         return _waveSettingsList[index];
     }
 
+    public bool IsActiveLineLocked()
+    {
+        return _lockedMarkers.Contains(selectedLineIndex);
+    }
+
+    public void SetSelectedLineLockValue(bool nowLocked)
+    {
+        if (nowLocked == false)
+        {
+            if (_lockedMarkers.Contains(selectedLineIndex))
+                _lockedMarkers.Remove(selectedLineIndex);
+        }
+        else
+        {
+            if (_lockedMarkers.Contains(selectedLineIndex) == false)
+                _lockedMarkers.Add(selectedLineIndex);
+
+        }
+       
+    }
 }

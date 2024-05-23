@@ -49,17 +49,18 @@ namespace UI
         private void ChangeGlobalSpeedSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetGlobalWaveSpeed(evt.newValue);
+            _lineGlobalSpeedSlider.label = "Speed: " + WaveController.Instance.waveSpeed.ToString("F2"); 
         }
    
         private void ChangeGlobalAmplitudeSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetGlobalWaveAmplitude(evt.newValue);
-
+            _lineGlobalAmplitudeSlider.label = "Amplitude: " + WaveController.Instance.waveAmplitude.ToString("F2");
         }
         private void ChangeGlobalWavelengthSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetGlobalWaveWavelength(evt.newValue);
-
+           _lineGlobalWavelengthSlider.label = "Wavelength: " + WaveController.Instance.waveLength.ToString("F2");
         }
     }
 }

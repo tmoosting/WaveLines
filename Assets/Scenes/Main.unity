@@ -557,7 +557,7 @@ MonoBehaviour:
   selectedLineIndex: 0
   pointCount: 100
   baseHeight: 2
-  lineAmount: 3
+  lineAmount: 6
   lineHorizontalSpacing: 2
   lineVerticalSpacing: 0.25
   lineLength: 10
@@ -566,6 +566,12 @@ MonoBehaviour:
   waveAmplitude: 1
   waveLength: 2
   spawnStartEndMarkers: 1
+  speedMinValue: 0.01
+  speedMaxValue: 5
+  amplitudeMinValue: 0.01
+  amplitudeMaxValue: 5
+  wavelengthMinValue: 0.01
+  wavelengthMaxValue: 5
 --- !u!4 &1925082596
 Transform:
   m_ObjectHideFlags: 0

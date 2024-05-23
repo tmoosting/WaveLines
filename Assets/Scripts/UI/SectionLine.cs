@@ -9,12 +9,31 @@ namespace UI
         private SpecialSlider _lineSpeedSlider;
         private SpecialSlider _lineAmplitudeSlider;
         private SpecialSlider _lineWavelengthSlider;
+
+        private Toggle _lockToggle;
     
         public    SectionLine()
         { 
             style.width = Length.Percent(100);
             style.height = Length.Percent(100);
-        
+
+            BuildWaveSettingSliders();
+
+            _lockToggle = new Toggle();
+            _lockToggle.label = "Lock Wave Settings";
+            _lockToggle.value = WaveController.Instance.IsActiveLineLocked();
+            _lockToggle.RegisterValueChangedCallback(ToggleLineLock);
+            Add(_lockToggle);
+
+        }
+
+        private void ToggleLineLock(ChangeEvent<bool> evt)
+        {
+            WaveController.Instance.SetSelectedLineLockValue(evt.newValue);
+        }
+
+        private void BuildWaveSettingSliders()
+        {
             _lineSpeedSlider = new SpecialSlider
             {
                 label = "Speed: " + WaveController.Instance.GetWaveSettingsForIndex().waveSpeed.ToString("F2"),
@@ -44,9 +63,8 @@ namespace UI
             };
             _lineWavelengthSlider.RegisterValueChangedCallback(ChangeWavelengthSliderValue);
             Add(_lineWavelengthSlider);
-         
         }
-    
+
         private void ChangeSpeedSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveSpeed(evt.newValue);
