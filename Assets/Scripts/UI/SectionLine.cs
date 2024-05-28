@@ -20,6 +20,7 @@ namespace UI
             BuildWaveSettingSliders();
 
             _lockToggle = new Toggle();
+            _lockToggle.style.width = 200;
             _lockToggle.label = "Lock Wave Settings";
             _lockToggle.value = WaveController.Instance.IsActiveLineLocked();
             _lockToggle.RegisterValueChangedCallback(ToggleLineLock);
@@ -36,8 +37,8 @@ namespace UI
         {
             _lineSpeedSlider = new SpecialSlider
             {
-                label = "Speed: " + WaveController.Instance.GetWaveSettingsForIndex().waveSpeed.ToString("F2"),
-                value = WaveController.Instance.GetWaveSettingsForIndex().waveSpeed,
+                label = "Speed: " + WaveController.Instance.GetWaveSettingsForIndex().WaveSpeed.ToString("F2"),
+                value = WaveController.Instance.GetWaveSettingsForIndex().WaveSpeed,
                 lowValue = WaveController.Instance.speedMinValue,
                 highValue =  WaveController.Instance.speedMaxValue,
             };
@@ -46,8 +47,8 @@ namespace UI
         
             _lineAmplitudeSlider = new SpecialSlider
             {
-                label = "Amplitude: " + WaveController.Instance.GetWaveSettingsForIndex().waveAmplitude.ToString("F2"),
-                value = WaveController.Instance.GetWaveSettingsForIndex().waveAmplitude,
+                label = "Amplitude: " + WaveController.Instance.GetWaveSettingsForIndex().WaveAmplitude.ToString("F2"),
+                value = WaveController.Instance.GetWaveSettingsForIndex().WaveAmplitude,
                 lowValue = WaveController.Instance.amplitudeMinValue,
                 highValue =  WaveController.Instance.amplitudeMaxValue,
             };
@@ -56,8 +57,8 @@ namespace UI
         
             _lineWavelengthSlider = new SpecialSlider
             {
-                label = "Wavelength: " + WaveController.Instance.GetWaveSettingsForIndex().waveLength.ToString("F2"),
-                value = WaveController.Instance.GetWaveSettingsForIndex().waveLength,
+                label = "Wavelength: " + WaveController.Instance.GetWaveSettingsForIndex().WaveLength.ToString("F2"),
+                value = WaveController.Instance.GetWaveSettingsForIndex().WaveLength,
                 lowValue = WaveController.Instance.wavelengthMinValue,
                 highValue =  WaveController.Instance.wavelengthMaxValue,
             };
@@ -68,17 +69,17 @@ namespace UI
         private void ChangeSpeedSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveSpeed(evt.newValue);
-            _lineSpeedSlider.label = "Speed: " + WaveController.Instance.GetWaveSettingsForIndex().waveSpeed.ToString("F2");
+            _lineSpeedSlider.label = "Speed: " + WaveController.Instance.GetWaveSettingsForIndex().WaveSpeed.ToString("F2");
         }
         private void ChangeAmplitudeSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveAmplitude(evt.newValue);
-            _lineAmplitudeSlider.label = "Amplitude: " + WaveController.Instance.GetWaveSettingsForIndex().waveAmplitude.ToString("F2");
+            _lineAmplitudeSlider.label = "Amplitude: " + WaveController.Instance.GetWaveSettingsForIndex().WaveAmplitude.ToString("F2");
         }
         private void ChangeWavelengthSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveWavelength(evt.newValue);
-            _lineWavelengthSlider.label = "Wavelength: " + WaveController.Instance.GetWaveSettingsForIndex().waveLength.ToString("F2");
+            _lineWavelengthSlider.label = "Wavelength: " + WaveController.Instance.GetWaveSettingsForIndex().WaveLength.ToString("F2");
         }
     }
 }

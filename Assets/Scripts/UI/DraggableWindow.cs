@@ -24,6 +24,8 @@ public class DraggableWindow : MonoBehaviour
 
     void OnMouseDown(MouseDownEvent evt)
     {
+        if (evt.button != 0)
+            return;
         isDragging = true;
         startMousePosition = evt.mousePosition;
         startPosition = window.transform.position;

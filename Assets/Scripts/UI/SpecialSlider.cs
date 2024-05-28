@@ -1,14 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+ 
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SpecialSlider : Slider
+namespace UI
 {
-
-    public SpecialSlider()
+    public class SpecialSlider : Slider
     {
-        style.marginTop = 1f;
-    }
+
+        public SpecialSlider()
+        {
+            style.marginTop = 1f;
+            var trackerBar = this.Q<VisualElement>("unity-tracker");
+            if (trackerBar != null)
+            {
+                trackerBar.style.backgroundColor = Color.clear;
+            }
+            var dragger = this.Q<VisualElement>("unity-dragger");
+            if (dragger != null)
+            {
+                dragger.style.backgroundColor = Color.cyan;
+            }
+        }
    
+    }
 }

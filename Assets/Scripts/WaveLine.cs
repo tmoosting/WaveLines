@@ -36,9 +36,9 @@ public class WaveLine : MonoBehaviour
     }
     public void LoadWaveSettings(WaveSettings waveSettings)
     {
-        speed = waveSettings.waveSpeed;
-        amplitude = waveSettings.waveAmplitude;
-        waveLength = waveSettings.waveLength;
+        speed = waveSettings.WaveSpeed;
+        amplitude = waveSettings.WaveAmplitude;
+        waveLength = waveSettings.WaveLength;
         _waving = true;
     }
     

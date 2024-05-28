@@ -158,7 +158,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -528,6 +528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1925082596}
   - component: {fileID: 1925082595}
+  - component: {fileID: 1925082597}
   m_Layer: 0
   m_Name: WaveController
   m_TagString: Untagged
@@ -572,6 +573,20 @@ MonoBehaviour:
   amplitudeMaxValue: 5
   wavelengthMinValue: 0.01
   wavelengthMaxValue: 5
+  pointCountMinValue: 50
+  pointCountMaxValue: 500
+  heightMinValue: 1
+  heightMaxValue: 10
+  lineCountMinValue: 1
+  lineCountMaxValue: 20
+  horizontalSpaceMinValue: 0.5
+  horizontalSpaceMaxValue: 5
+  verticalSpaceMinValue: 0
+  verticalSpaceMaxValue: 5
+  lengthMinValue: 1
+  lengthMaxValue: 50
+  diameterMinValue: 0.01
+  diameterMaxValue: 5
 --- !u!4 &1925082596
 Transform:
   m_ObjectHideFlags: 0
@@ -587,6 +602,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1925082597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925082594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f39d5bf4d4dbd24ba625f814a13e74c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

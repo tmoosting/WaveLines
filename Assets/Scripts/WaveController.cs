@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 // To Do 
-// setup UI and refresh
+  
 // file export, import in data ui
    
 
@@ -37,8 +37,10 @@ public class WaveController : MonoBehaviour
     private List<GameObject> _startSpawnMarkers;
     private List<GameObject> _endSpawnMarkers;
     private List<WaveLine> _waveLines;
-    private List<int> _lockedMarkers;
-    private List<WaveSettings> _waveSettingsList;
+    [HideInInspector]
+    public List<int> lockedMarkers;
+    [HideInInspector]
+    public List<WaveSettings> waveSettingsList;
     
     
     // Lines
@@ -58,14 +60,33 @@ public class WaveController : MonoBehaviour
     public float waveLength; // length of one wave 
     
     
-    // Settings
     public bool spawnStartEndMarkers;
+
+    
+    // Min Max Values - Waves
     public float speedMinValue = 0.01f;
     public float speedMaxValue = 5f;
     public float amplitudeMinValue = 0.01f;
     public float amplitudeMaxValue = 5f;
     public float wavelengthMinValue = 0.01f;
     public float wavelengthMaxValue = 5f;
+    
+    // Min Max Values - Setup
+    public float pointCountMinValue = 50f;
+    public float pointCountMaxValue = 500f;
+    public float heightMinValue = 1f;
+    public float heightMaxValue = 10f;
+    public float lineCountMinValue = 1f;
+    public float lineCountMaxValue = 20f;
+    public float horizontalSpaceMinValue = 0.5f;
+    public float horizontalSpaceMaxValue = 5f;
+    public float verticalSpaceMinValue = 0f;
+    public float verticalSpaceMaxValue = 5f;
+    public float lengthMinValue = 1f;
+    public float lengthMaxValue = 50f;
+    public float diameterMinValue = 0.01f;
+    public float diameterMaxValue = 5f;
+    
     
     private void Awake()
     {
@@ -74,6 +95,8 @@ public class WaveController : MonoBehaviour
 
     private void Start()
     {
+        lockedMarkers = new List<int>();
+
         SpawnEverything();
    
     }
@@ -90,7 +113,54 @@ public class WaveController : MonoBehaviour
         
         SpawnWaves(); 
     }
+    public void Rebuild()
+    {
+        DestroyStartMarkers();
+        DestroyWaveLines();
+        SpawnEverything();
+    }
 
+    public void SaveSettings()
+    {
+        SettingsManager.Instance.SaveSettingsToFile();
+    }
+    public void LoadSettings()
+    {
+        SettingsManager.Instance.LoadSettingsFromFile(); 
+        
+    }
+    public void ApplyLoadedSettings(SettingsFile settings)
+    {
+        // Update global settings
+        pointCount = settings.PointCount;
+        baseHeight = settings.BaseHeight;
+        lineAmount = settings.LineAmount;
+        lineHorizontalSpacing = settings.LineHorizontalSpacing;
+        lineVerticalSpacing = settings.LineVerticalSpacing;
+        lineLength = settings.LineLength;
+        lineDiameter = settings.LineDiameter;
+        waveSpeed = settings.WaveSpeed;
+        waveAmplitude = settings.WaveAmplitude;
+        waveLength = settings.WaveLength;
+
+  
+
+        // Apply wave settings to each line
+        waveSettingsList = new List<WaveSettings>(settings.WaveSettingsList); 
+        // Since the structure of the lines might have changed, need to rebuild the visual representation
+    
+        lockedMarkers = new List<int>(settings.LockedMarkers);
+
+        Rebuild();
+ 
+        
+        // Optionally, refresh UI elements if needed
+        controlUI?.RefreshWindow(0); // Assuming there is a method to update UI based on new settings
+    }
+
+ 
+    
+    
     public void ClickLineWithIndex(int index)
     { 
         selectedLineIndex = index;
@@ -98,68 +168,68 @@ public class WaveController : MonoBehaviour
         controlUI.RefreshWindow(3  );
         UpdateSpawnMarkers();
     }
+    
+    
+    
+    
+    
+    
     public void SetGlobalWaveSpeed(float evtNewValue)
     {
         waveSpeed = evtNewValue;
-        foreach (var waveSettings in _waveSettingsList)
+        foreach (var waveSettings in waveSettingsList)
         {
-            int index = _waveSettingsList.IndexOf(waveSettings);
-            if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveSpeed = waveSpeed;  
+            int index = waveSettingsList.IndexOf(waveSettings);
+            if (lockedMarkers.Contains(index) == false) 
+                waveSettingsList[index].WaveSpeed = waveSpeed;  
         }
         MakeWaveChange();
     }
     public void SetGlobalWaveAmplitude(float evtNewValue)
     {
         waveAmplitude = evtNewValue;
-        foreach (var waveSettings in _waveSettingsList)
+        foreach (var waveSettings in waveSettingsList)
         {
-            int index = _waveSettingsList.IndexOf(waveSettings);
-            if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveAmplitude = waveAmplitude;  
+            int index = waveSettingsList.IndexOf(waveSettings);
+            if (lockedMarkers.Contains(index) == false) 
+                waveSettingsList[index].WaveAmplitude = waveAmplitude;  
         }
         MakeWaveChange(); 
     }
     public void SetGlobalWaveWavelength(float evtNewValue)
     {
         waveLength = evtNewValue;
-        foreach (var waveSettings in _waveSettingsList)
+        foreach (var waveSettings in waveSettingsList)
         {
-            int index = _waveSettingsList.IndexOf(waveSettings);
-            if (_lockedMarkers.Contains(index) == false) 
-                _waveSettingsList[index].waveLength = waveLength;  
+            int index = waveSettingsList.IndexOf(waveSettings);
+            if (lockedMarkers.Contains(index) == false) 
+                waveSettingsList[index].WaveLength = waveLength;  
         }
         MakeWaveChange(); 
     }
     public void SetWaveSpeed(float evtNewValue)
     {
-        _waveSettingsList[selectedLineIndex].waveSpeed = evtNewValue;
+        waveSettingsList[selectedLineIndex].WaveSpeed = evtNewValue;
         MakeWaveChange();
     }
     public void SetWaveAmplitude(float evtNewValue)
     {
-        _waveSettingsList[selectedLineIndex].waveAmplitude = evtNewValue;
+        waveSettingsList[selectedLineIndex].WaveAmplitude = evtNewValue;
         MakeWaveChange();
     }
     public void SetWaveWavelength(float evtNewValue)
     {
-        _waveSettingsList[selectedLineIndex].waveLength = evtNewValue;
+        waveSettingsList[selectedLineIndex].WaveLength = evtNewValue;
         MakeWaveChange();
     }
     
-    public void MakeLineChange()
-    {
-        DestroyStartMarkers();
-        DestroyWaveLines();
-        SpawnEverything();
-    }
-
+  
     public void MakeWaveChange()
     {
         foreach (var waveLine in _waveLines)
         {
             int index = _waveLines.IndexOf(waveLine);
-            waveLine.LoadWaveSettings(_waveSettingsList[index] );
+            waveLine.LoadWaveSettings(waveSettingsList[index] );
         }
     }
 
@@ -178,7 +248,7 @@ public class WaveController : MonoBehaviour
             if (line != null)
                 Destroy(line.gameObject);
         _waveLines = new List<WaveLine>();
-        _waveSettingsList = new List<WaveSettings>();
+        waveSettingsList = new List<WaveSettings>();
     }
 
     private void SpawnWaves()
@@ -188,7 +258,7 @@ public class WaveController : MonoBehaviour
     } 
     private void SpawnWaveLines()
     {
-        _waveSettingsList = new List<WaveSettings>();
+        waveSettingsList = new List<WaveSettings>();
         _waveLines = new List<WaveLine>();
         foreach (var vector3 in _startEndPoints.Keys)
             SpawnWaveLine(vector3,_startEndPoints[vector3] );
@@ -214,7 +284,7 @@ public class WaveController : MonoBehaviour
             waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLength   );
             WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
             waveLine.LoadWaveSettings(waveSettings); 
-            _waveSettingsList.Add(waveSettings);
+            waveSettingsList.Add(waveSettings);
         }
        
     }
@@ -242,7 +312,6 @@ public class WaveController : MonoBehaviour
 
     private void SpawnStartMarkers()
     {
-        _lockedMarkers = new List<int>();
         _startSpawnMarkers = new List<GameObject>();
         _endSpawnMarkers = new List<GameObject>();
 
@@ -264,7 +333,7 @@ public class WaveController : MonoBehaviour
             int index = _startSpawnMarkers.IndexOf(marker);
             if (selectedLineIndex == index)
                 marker.GetComponent<SpawnMarker>().SetMaterial(selectedMarkerMaterial);
-            else if (_lockedMarkers.Contains(index))
+            else if (lockedMarkers.Contains(index))
                 marker.GetComponent<SpawnMarker>().SetMaterial(lockedMarkerMaterial);
             else
                 marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial); 
@@ -276,28 +345,64 @@ public class WaveController : MonoBehaviour
     public WaveSettings GetWaveSettingsForIndex(int index = 99)
     {
         if (index == 99)
-            return _waveSettingsList[selectedLineIndex];
-        return _waveSettingsList[index];
+            return waveSettingsList[selectedLineIndex];
+        return waveSettingsList[index];
     }
 
     public bool IsActiveLineLocked()
     {
-        return _lockedMarkers.Contains(selectedLineIndex);
+        return lockedMarkers.Contains(selectedLineIndex);
     }
 
     public void SetSelectedLineLockValue(bool nowLocked)
     {
         if (nowLocked == false)
         {
-            if (_lockedMarkers.Contains(selectedLineIndex))
-                _lockedMarkers.Remove(selectedLineIndex);
+            if (lockedMarkers.Contains(selectedLineIndex))
+                lockedMarkers.Remove(selectedLineIndex);
         }
         else
         {
-            if (_lockedMarkers.Contains(selectedLineIndex) == false)
-                _lockedMarkers.Add(selectedLineIndex);
-
+            if (lockedMarkers.Contains(selectedLineIndex) == false)
+                lockedMarkers.Add(selectedLineIndex); 
         }
        
     }
+
+    public void SetPointAmount(int evtNewValue)
+    {
+        pointCount = evtNewValue;
+    }
+
+    public void SetHeight(float evtNewValue)
+    {
+        baseHeight = evtNewValue;
+    }
+
+    public void SetLinesAmount(int evtNewValue)
+    {
+        lineAmount = evtNewValue;
+    }
+
+    public void SetHorizontalSpaceAmount(float evtNewValue)
+    {
+        lineHorizontalSpacing = evtNewValue;
+    }
+
+    public void SetVerticalSpaceAmount(float evtNewValue)
+    {
+        lineVerticalSpacing = evtNewValue;
+    }
+
+    public void SetLineLength(float evtNewValue)
+    {
+        lineLength = evtNewValue;
+    }
+
+    public void SetLineDiameter(float evtNewValue)
+    {
+        lineDiameter = evtNewValue;
+    }
+
+
 }

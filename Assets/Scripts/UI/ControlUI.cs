@@ -6,14 +6,6 @@ namespace UI
     public class ControlUI : MonoBehaviour
     {
     
-        // Setup  (applies to all, regardless of lock state)
-        // pointcount: slider 
-        // baseheight: slider
-        // lineAmount: slider
-        // lineHorizontalSpacing: slider
-        // lineVerticalSpacing: slider
-        // linelength: slider
-        // linediameter: slider
     
     
         // Global Lines (applies to unlocked only)
@@ -73,8 +65,8 @@ namespace UI
         {
             content = new VisualElement();
             content.style.width = Length.Percent(98);
-            content.style.height = 500;
-            //   content.style.height = Length.Percent(98);
+          //  content.style.height = 500;
+              content.style.height = Length.Percent(98);
             content.style.marginTop = 2f;
             content.style.marginLeft = 3f;
             content.style.marginRight = 5f;
@@ -109,7 +101,7 @@ namespace UI
         { 
             tabRow.Clear();
             // Create tabs
-            string[] tabNames = { "Setup","Data" , "Global", "Line ", };
+            string[] tabNames = { "Setup","Data" , "All Lines", "Line ", };
             for (int i = 0; i < tabNames.Length; i++)
             {
                 int tabIndex = i;
