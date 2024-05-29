@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,7 @@ namespace UI
         private SpecialSlider _lineSpeedSlider;
         private SpecialSlider _lineAmplitudeSlider;
         private SpecialSlider _lineWavelengthSlider;
+        private DropdownField _colorDropdown;
 
         private Toggle _lockToggle;
     
@@ -18,7 +20,8 @@ namespace UI
             style.height = Length.Percent(100);
 
             BuildWaveSettingSliders();
-
+            BuildColorDropdown();
+            
             _lockToggle = new Toggle();
             _lockToggle.style.width = 200;
             _lockToggle.label = "Lock Wave Settings";
@@ -65,7 +68,20 @@ namespace UI
             _lineWavelengthSlider.RegisterValueChangedCallback(ChangeWavelengthSliderValue);
             Add(_lineWavelengthSlider);
         }
-
+        private void BuildColorDropdown()
+        {
+            _colorDropdown = new DropdownField
+            {
+                label = "Select Color"
+            };
+            _colorDropdown.choices = WaveController.Instance.lineColors.Select(c => $"R: {c.r}, G: {c.g}, B: {c.b}").ToList();
+            _colorDropdown.RegisterValueChangedCallback(ChangeLineColor);
+          //  Add(_colorDropdown);
+        }
+        private void ChangeLineColor(ChangeEvent<string> evt)
+        {
+            WaveController.Instance.SetLineColor(evt.newValue);
+       }
         private void ChangeSpeedSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveSpeed(evt.newValue);

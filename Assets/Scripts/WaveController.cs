@@ -9,7 +9,7 @@ using UnityEngine.Timeline;
 
 // To Do 
   
-// file export, import in data ui
+// different colors on rightclick 
    
 
 
@@ -87,7 +87,52 @@ public class WaveController : MonoBehaviour
     public float diameterMinValue = 0.01f;
     public float diameterMaxValue = 5f;
     
+    public  List<Color> lineColors;
+
+    private void CreateLineColors()
+    {
+        lineColors = new List<Color>()
+        {
+            new Color32(204, 226, 233, 255), // Light Grayish Blue
+            new Color32(103, 137, 171, 255), // Desaturated Blue
+            new Color32(76, 105, 133, 255),  // Dark Desaturated Blue
+            new Color32(55, 79, 102, 255),   // Darker Desaturated Blue
+            new Color32(209, 209, 209, 255), // Very Light Grey
+            new Color32(159, 173, 185, 255), // Light Grey Blue
+            new Color32(112, 130, 151, 255), // Greyish Blue
+            new Color32(63, 78, 95, 255)     // Dark Greyish Blue
+        };
+    }
+
+    public Color GetColorForIndex(int index)
+    {
+        if (lineColors == null || lineColors.Count == 0)
+        {
+            Debug.LogError("lineColors list is not initialized or empty.");
+            return Color.black;  
+        }
     
+        return lineColors[index % lineColors.Count];
+    }
+    public Color GetNextColor(Color currentColor)
+    {
+        if (lineColors == null || lineColors.Count == 0)
+        {
+            Debug.LogError("lineColors list is not initialized or empty.");
+            return Color.black; // Return a default color to handle errors gracefully.
+        }
+
+        int currentIndex = lineColors.IndexOf(currentColor);
+        if (currentIndex == -1)
+        {
+            Debug.LogError("The provided color is not in the list.");
+            return Color.black; // Return a default color if the color is not found.
+        }
+
+        int nextIndex = (currentIndex + 1) % lineColors.Count; // Calculate next index, wrap around if necessary.
+        return lineColors[nextIndex];
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -96,7 +141,7 @@ public class WaveController : MonoBehaviour
     private void Start()
     {
         lockedMarkers = new List<int>();
-
+        CreateLineColors();
         SpawnEverything();
    
     }
@@ -161,13 +206,18 @@ public class WaveController : MonoBehaviour
  
     
     
-    public void ClickLineWithIndex(int index)
+    public void LeftClickLineWithIndex(int index)
     { 
         selectedLineIndex = index;
         // open tab for line
         controlUI.RefreshWindow(3  );
         UpdateSpawnMarkers();
     }
+        public void RightClickLineWithIndex(int index)
+        {
+            _waveLines[index].GetComponent<LineRenderer>().material.color =
+                GetNextColor(_waveLines[index].GetComponent<LineRenderer>().material.color);
+        }
     
     
     
@@ -222,6 +272,25 @@ public class WaveController : MonoBehaviour
         waveSettingsList[selectedLineIndex].WaveLength = evtNewValue;
         MakeWaveChange();
     }
+    public void SetLineColor(string colorString)
+    {
+        // Parse the string back into color components
+        string[] parts = colorString.Split(',');
+        if (parts.Length == 3)
+        {
+            float r = float.Parse(parts[0]);
+            float g = float.Parse(parts[1]);
+            float b = float.Parse(parts[2]);
+            Color newColor = new Color(r, g, b);
+            // Set the color to the selected line
+            waveSettingsList[selectedLineIndex].LineColor = newColor;
+            MakeWaveChange();
+        }
+        else
+        {
+            Debug.LogError("Invalid color format.");
+        }
+    }
     
   
     public void MakeWaveChange()
@@ -268,8 +337,7 @@ public class WaveController : MonoBehaviour
         GameObject lineObj = Instantiate(waveLinePrefab);
         lineObj.transform.position = startPoint;
          WaveLine waveLine = lineObj.GetComponent<WaveLine>();
-     //   waveLine.GetComponent<LineRenderer>().SetPosition(0, startPoint);
-     
+     //   waveLine.GetComponent<LineRenderer>().SetPosition(0, startPoint); 
      
         _waveLines.Add(waveLine);
     }

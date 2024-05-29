@@ -14,9 +14,19 @@ public class SpawnMarker : MonoBehaviour
      }
      
      private void OnMouseUp()
-     {
-          WaveController.Instance.ClickLineWithIndex(lineIndex);
+     { 
+          if (Input.GetMouseButtonUp(0))
+          { 
+               WaveController.Instance.LeftClickLineWithIndex(lineIndex);
+          }
+     
+          else if (Input.GetMouseButtonUp(1))
+          {
+               WaveController.Instance.RightClickLineWithIndex(lineIndex);
+
+          }
      }
+
 
    
 

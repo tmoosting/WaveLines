@@ -10,6 +10,7 @@ public class WaveSettings
     public float WaveSpeed; // how fast the wave travels 
     public float WaveAmplitude; // distance from center to max extent
     public float WaveLength; // length of one wave 
+    public Color LineColor;
 
     public WaveSettings(int givenIndex, float speed, float amplitude, float length)
     {
