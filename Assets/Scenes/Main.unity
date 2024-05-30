@@ -565,10 +565,14 @@ MonoBehaviour:
   lineVerticalSpacing: 0.5
   lineLength: 10
   lineDiameter: 0.25
+  spawnStartEndMarkers: 1
+  lineMaterial1: {fileID: 2100000, guid: 40a9aff7a4142a443b7cf40cfd0e5d13, type: 2}
+  lineMaterial2: {fileID: 2100000, guid: e50bec09bbf48c241aef1a62ce3d1bf6, type: 2}
+  lineMaterial3: {fileID: 2100000, guid: 3329fdeeb2de2ee4c8b34c9b0e094151, type: 2}
+  lineMaterialNone: {fileID: 2100000, guid: 923da0fddb198e44ca69adca80c4cd43, type: 2}
   waveSpeed: 1
   waveAmplitude: 1
   waveLength: 2
-  spawnStartEndMarkers: 1
   speedMinValue: 0.01
   speedMaxValue: 5
   amplitudeMinValue: 0.01
@@ -589,6 +593,8 @@ MonoBehaviour:
   lengthMaxValue: 50
   diameterMinValue: 0.01
   diameterMaxValue: 5
+  lineColors: []
+  colorValue: 
 --- !u!4 &1925082596
 Transform:
   m_ObjectHideFlags: 0

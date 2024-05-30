@@ -10,7 +10,6 @@ namespace UI
         private SpecialSlider _lineSpeedSlider;
         private SpecialSlider _lineAmplitudeSlider;
         private SpecialSlider _lineWavelengthSlider;
-        private DropdownField _colorDropdown;
 
         private Toggle _lockToggle;
     
@@ -19,8 +18,7 @@ namespace UI
             style.width = Length.Percent(100);
             style.height = Length.Percent(100);
 
-            BuildWaveSettingSliders();
-            BuildColorDropdown();
+            BuildWaveSettingSliders(); 
             
             _lockToggle = new Toggle();
             _lockToggle.style.width = 200;
@@ -33,7 +31,7 @@ namespace UI
 
         private void ToggleLineLock(ChangeEvent<bool> evt)
         {
-            WaveController.Instance.SetSelectedLineLockValue(evt.newValue);
+            WaveController.Instance.SetShowMarkers(evt.newValue);
         }
 
         private void BuildWaveSettingSliders()
@@ -68,20 +66,8 @@ namespace UI
             _lineWavelengthSlider.RegisterValueChangedCallback(ChangeWavelengthSliderValue);
             Add(_lineWavelengthSlider);
         }
-        private void BuildColorDropdown()
-        {
-            _colorDropdown = new DropdownField
-            {
-                label = "Select Color"
-            };
-            _colorDropdown.choices = WaveController.Instance.lineColors.Select(c => $"R: {c.r}, G: {c.g}, B: {c.b}").ToList();
-            _colorDropdown.RegisterValueChangedCallback(ChangeLineColor);
-          //  Add(_colorDropdown);
-        }
-        private void ChangeLineColor(ChangeEvent<string> evt)
-        {
-            WaveController.Instance.SetLineColor(evt.newValue);
-       }
+     
+     
         private void ChangeSpeedSliderValue(ChangeEvent<float> evt)
         {
             WaveController.Instance.SetWaveSpeed(evt.newValue);

@@ -9,8 +9,7 @@ using UnityEngine.Timeline;
 
 // To Do 
   
-// different colors on rightclick 
-   
+// hide poles 
 
 
 public class WaveController : MonoBehaviour
@@ -44,25 +43,33 @@ public class WaveController : MonoBehaviour
     
     
     // Lines
+    [Header("Setup")]
     public int pointCount = 100;
     public float baseHeight = 1.5f;
     public int lineAmount = 10; // number of waves total
     public float lineHorizontalSpacing = 2; // horizontal space between waves
     public float lineVerticalSpacing = 1; // distance in height for each wave
     public float lineLength = 12; // length of line in total; needs to always be a complete number of waves!
-    public float lineDiameter = 2; // thickness of lines
-    // to add: line texture; 
-    
-    
+    public float lineDiameter = 2; // thickness of lines 
+    public bool spawnStartEndMarkers;
+
+    [Header("Graphics")]
+    public Material lineMaterial1;
+    public Material lineMaterial2;
+    public Material lineMaterial3;
+    public Material lineMaterialNone;
+
+    [Header("Waves")]
+
     // Waves Global Settings
     public float waveSpeed; // how fast the wave travels 
     public float waveAmplitude; // distance from center to max extent
     public float waveLength; // length of one wave 
     
     
-    public bool spawnStartEndMarkers;
 
-    
+    [Header("MinMax Waves")]
+
     // Min Max Values - Waves
     public float speedMinValue = 0.01f;
     public float speedMaxValue = 5f;
@@ -71,6 +78,8 @@ public class WaveController : MonoBehaviour
     public float wavelengthMinValue = 0.01f;
     public float wavelengthMaxValue = 5f;
     
+    [Header("MinMax Setup")]
+
     // Min Max Values - Setup
     public float pointCountMinValue = 50f;
     public float pointCountMaxValue = 500f;
@@ -88,6 +97,11 @@ public class WaveController : MonoBehaviour
     public float diameterMaxValue = 5f;
     
     public  List<Color> lineColors;
+
+    [HideInInspector]
+    public string colorValue = "Colors"; 
+    [HideInInspector]
+    public bool showMarkers = true;
 
     private void CreateLineColors()
     {
@@ -136,6 +150,7 @@ public class WaveController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        colorValue = "Colors";
     }
 
     private void Start()
@@ -274,24 +289,30 @@ public class WaveController : MonoBehaviour
     }
     public void SetLineColor(string colorString)
     {
-        // Parse the string back into color components
-        string[] parts = colorString.Split(',');
-        if (parts.Length == 3)
-        {
-            float r = float.Parse(parts[0]);
-            float g = float.Parse(parts[1]);
-            float b = float.Parse(parts[2]);
-            Color newColor = new Color(r, g, b);
-            // Set the color to the selected line
-            waveSettingsList[selectedLineIndex].LineColor = newColor;
-            MakeWaveChange();
-        }
-        else
-        {
-            Debug.LogError("Invalid color format.");
-        }
+        colorValue = colorString;
     }
-    
+
+    public Material GetMaterial()
+    {
+        if (colorValue == "Colors")
+        {
+            return lineMaterialNone;
+        }
+        else  if (colorValue == "Material 1")
+        {
+            return lineMaterial1;
+        }
+        else  if (colorValue == "Material 2")
+        {
+            return lineMaterial2;
+        }
+        else  if (colorValue == "Material 3")
+        {
+            return lineMaterial3;
+        }
+
+        return lineMaterialNone;
+    }
   
     public void MakeWaveChange()
     {
@@ -404,7 +425,16 @@ public class WaveController : MonoBehaviour
             else if (lockedMarkers.Contains(index))
                 marker.GetComponent<SpawnMarker>().SetMaterial(lockedMarkerMaterial);
             else
-                marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial); 
+                marker.GetComponent<SpawnMarker>().SetMaterial(defaultMarkerMaterial);
+
+            if (showMarkers == false)
+            {
+                marker.GetComponent<MeshRenderer>().enabled = false;
+            }
+            else
+            {
+                marker.GetComponent<MeshRenderer>().enabled = true; 
+            }
         }
     }
 
@@ -473,4 +503,8 @@ public class WaveController : MonoBehaviour
     }
 
 
+    public void SetShowMarkers(bool evtNewValue)
+    {
+        showMarkers = evtNewValue;
+    }
 }

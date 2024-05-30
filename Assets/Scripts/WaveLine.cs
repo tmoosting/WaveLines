@@ -33,6 +33,7 @@ public class WaveLine : MonoBehaviour
         _lineRenderer.positionCount = positionCount;
         _lineRenderer.startWidth = diameter;
         _lineRenderer.endWidth = diameter;
+        _lineRenderer.material = WaveController.Instance.GetMaterial();
         _lineRenderer.material.color = WaveController.Instance.GetColorForIndex(index);
     }
     public void LoadWaveSettings(WaveSettings waveSettings)

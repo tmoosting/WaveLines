@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,10 +18,15 @@ namespace UI
         private SpecialSlider _lengthSlider; 
         private SpecialSlider _diameterSlider;
         
+
+        private SpecialDropdown _colorDropdown;
+
+        private Toggle _markerToggle;
+
+
         private SpecialButton _rebuildButton;
 
-
-
+        
         public SectionSetup()
         {
             style.width = Length.Percent(100);
@@ -97,6 +104,27 @@ namespace UI
             _pointsSlider.RegisterValueChangedCallback(ChangePointSliderValue);
             Add(_pointsSlider);
 
+            
+            _colorDropdown = new SpecialDropdown
+            {
+                label = "Visuals"
+            };
+            List<string> colorChoices = new List<string>();
+            colorChoices.Add("Colors");
+            colorChoices.Add("Material 1");
+            colorChoices.Add("Material 2");
+            colorChoices.Add("Material 3");
+            _colorDropdown.choices = colorChoices;
+            _colorDropdown.RegisterValueChangedCallback(ChangeLineColor);
+            _colorDropdown.SetValueWithoutNotify(WaveController.Instance.colorValue);
+            Add(_colorDropdown);
+
+            _markerToggle = new Toggle("Show Markers");
+            _markerToggle.style.width = 200; 
+            _markerToggle.value = WaveController.Instance.showMarkers; 
+            _markerToggle.RegisterValueChangedCallback(ToggleShowMarkers);
+            Add(_markerToggle);
+            
             _rebuildButton = new SpecialButton();
             _rebuildButton.clicked -= ClickRebuildButton;
             _rebuildButton.clicked += ClickRebuildButton;
@@ -105,7 +133,15 @@ namespace UI
             _rebuildButton.style.width = 120f; 
             Add(_rebuildButton);
         }
+        private void ToggleShowMarkers(ChangeEvent<bool> evt)
+        {
+            WaveController.Instance.showMarkers  = evt.newValue ;
+        }
 
+        private void ChangeLineColor(ChangeEvent<string> evt)
+        {
+            WaveController.Instance.SetLineColor(evt.newValue);
+        }
         private void ClickRebuildButton()
         {
             WaveController.Instance.Rebuild();

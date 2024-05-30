@@ -114,6 +114,7 @@ namespace UI
                     text = tabName,
                     style =
                     {
+                        unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Bold),
                         flexGrow = 1,
                         unityTextAlign = new StyleEnum<TextAnchor>(TextAnchor.MiddleCenter),
                         fontSize = 16,
