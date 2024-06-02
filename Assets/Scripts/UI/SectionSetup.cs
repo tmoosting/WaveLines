@@ -97,14 +97,12 @@ namespace UI
             _pointsSlider = new SpecialSlider
             {
                 label = "Points On Line " + WaveController.Instance.pointCount.ToString("F2"),
-                value = WaveController.Instance.pointCount,
                 lowValue = WaveController.Instance.pointCountMinValue,
                 highValue = WaveController.Instance.pointCountMaxValue,
+                value = WaveController.Instance.pointCount,
             };
             _pointsSlider.RegisterValueChangedCallback(ChangePointSliderValue);
             Add(_pointsSlider);
-
-            
             _colorDropdown = new SpecialDropdown
             {
                 label = "Visuals"
@@ -124,7 +122,6 @@ namespace UI
             _markerToggle.value = WaveController.Instance.showMarkers; 
             _markerToggle.RegisterValueChangedCallback(ToggleShowMarkers);
             Add(_markerToggle);
-            
             _rebuildButton = new SpecialButton();
             _rebuildButton.clicked -= ClickRebuildButton;
             _rebuildButton.clicked += ClickRebuildButton;
@@ -132,6 +129,10 @@ namespace UI
             _rebuildButton.style.marginTop = 10; 
             _rebuildButton.style.width = 120f; 
             Add(_rebuildButton);
+            
+     
+            
+       
         }
         private void ToggleShowMarkers(ChangeEvent<bool> evt)
         {

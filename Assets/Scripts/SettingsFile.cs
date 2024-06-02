@@ -14,7 +14,7 @@ public class SettingsFile
     public float LineDiameter;
     public float WaveSpeed;
     public float WaveAmplitude;
-    public float WaveLength;
+    public float WaveLength; 
     public List<int> LockedMarkers;
     public List<WaveSettings> WaveSettingsList;
 }

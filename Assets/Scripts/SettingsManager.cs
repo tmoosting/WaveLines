@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using SimpleFileBrowser; // Ensure you have imported the namespace for the file browser
 
 public class SettingsManager : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class SettingsManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        // It's generally a good practice to initialize the file browser at the start
+        FileBrowser.SetFilters(true, new FileBrowser.Filter("JSON Files", ".json"));
+        FileBrowser.SetDefaultFilter(".json");
     }
 
-    // Save settings to a JSON file
+    // Save settings to a JSON file using a runtime file browser
     public void SaveSettingsToFile()
     {
         SettingsFile settings = new SettingsFile
@@ -33,30 +37,38 @@ public class SettingsManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(settings, true);
 
-        string path = EditorUtility.SaveFilePanel("Save Configuration", "", "WaveConfig.json", "json");
-        if (!string.IsNullOrEmpty(path))
+        StartCoroutine(ShowSaveFileDialog(json));
+    }
+
+    IEnumerator ShowSaveFileDialog(string json)
+    {
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Save Configuration", "Save");
+        if (FileBrowser.Success)
         {
-            File.WriteAllText(path, json);
+            File.WriteAllText(FileBrowser.Result[0], json);
         }
     }
 
-    // Load settings from a JSON file
+    // Load settings from a JSON file using a runtime file browser
     public void LoadSettingsFromFile()
     {
-        string path = EditorUtility.OpenFilePanel("Load Configuration", "", "json");
-        if (!string.IsNullOrEmpty(path))
+        StartCoroutine(ShowLoadFileDialog());
+    }
+
+    IEnumerator ShowLoadFileDialog()
+    {
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Load Configuration", "Load");
+        if (FileBrowser.Success)
         {
-            string json = File.ReadAllText(path);
+            string json = File.ReadAllText(FileBrowser.Result[0]);
             ApplySettings(json);
         }
     }
 
     // Apply loaded settings
     private void ApplySettings(string json)
-    {
+    { 
         SettingsFile settings = JsonUtility.FromJson<SettingsFile>(json);
         WaveController.Instance.ApplyLoadedSettings(settings);
     }
 }
-
-

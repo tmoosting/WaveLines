@@ -39,7 +39,7 @@ public class WaveController : MonoBehaviour
     [HideInInspector]
     public List<int> lockedMarkers;
     [HideInInspector]
-    public List<WaveSettings> waveSettingsList;
+    public List<WaveSettings> waveSettingsList; 
     
     
     // Lines
@@ -155,6 +155,7 @@ public class WaveController : MonoBehaviour
 
     private void Start()
     {
+        waveSettingsList = new List<WaveSettings>(); 
         lockedMarkers = new List<int>();
         CreateLineColors();
         SpawnEverything();
@@ -173,8 +174,14 @@ public class WaveController : MonoBehaviour
         
         SpawnWaves(); 
     }
-    public void Rebuild()
+    public void RebuildAfterLoad()
     {
+        DestroyStartMarkers();
+        DestroyWaveLines();
+        SpawnEverything();
+    }
+    public void Rebuild()
+    { 
         DestroyStartMarkers();
         DestroyWaveLines();
         SpawnEverything();
@@ -203,17 +210,12 @@ public class WaveController : MonoBehaviour
         waveAmplitude = settings.WaveAmplitude;
         waveLength = settings.WaveLength;
 
-  
-
-        // Apply wave settings to each line
-        waveSettingsList = new List<WaveSettings>(settings.WaveSettingsList); 
-        // Since the structure of the lines might have changed, need to rebuild the visual representation
-    
-        lockedMarkers = new List<int>(settings.LockedMarkers);
-
-        Rebuild();
- 
+        waveSettingsList = settings.WaveSettingsList.ToList();
         
+        lockedMarkers = new List<int>(settings.LockedMarkers);
+ 
+        RebuildAfterLoad(); 
+       
         // Optionally, refresh UI elements if needed
         controlUI?.RefreshWindow(0); // Assuming there is a method to update UI based on new settings
     }
@@ -338,7 +340,6 @@ public class WaveController : MonoBehaviour
             if (line != null)
                 Destroy(line.gameObject);
         _waveLines = new List<WaveLine>();
-        waveSettingsList = new List<WaveSettings>();
     }
 
     private void SpawnWaves()
@@ -348,7 +349,7 @@ public class WaveController : MonoBehaviour
     } 
     private void SpawnWaveLines()
     {
-        waveSettingsList = new List<WaveSettings>();
+     
         _waveLines = new List<WaveLine>();
         foreach (var vector3 in _startEndPoints.Keys)
             SpawnWaveLine(vector3,_startEndPoints[vector3] );
@@ -365,20 +366,43 @@ public class WaveController : MonoBehaviour
     
     private void ConfigureWaveLines()
     {
-        foreach (var vector3 in _startEndPoints.Keys)
-        {
-            int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
+       
+            foreach (var vector3 in _startEndPoints.Keys)
+            {
+                int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
 
-            WaveLine waveLine = _waveLines[index];
-            waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLength   );
-            WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
-            waveLine.LoadWaveSettings(waveSettings); 
-            waveSettingsList.Add(waveSettings);
-        }
+                WaveLine waveLine = _waveLines[index];
+                waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLength   );
+
+                if (DoesWaveSettingExistForIndex(index) == false)
+                {
+                    WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
+                    waveLine.LoadWaveSettings(waveSettings); 
+                    waveSettingsList.Add(waveSettings);
+                }
+                else
+                {
+                    waveLine.LoadWaveSettings(waveSettingsList[index]); 
+                }
+          
+            }
+     
+      
        
     }
 
-
+    private bool DoesWaveSettingExistForIndex(int index)
+    {
+        if (waveSettingsList == null)
+            return false;
+        if (waveSettingsList.Count == 0)
+            return false;
+        foreach (var waveSettingse in waveSettingsList)
+            if (waveSettingse.Index == index)
+                return true;
+    
+        return false;
+    }
 
 
     private void DetermineStartEndPoints()

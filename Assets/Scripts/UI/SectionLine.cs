@@ -31,7 +31,7 @@ namespace UI
 
         private void ToggleLineLock(ChangeEvent<bool> evt)
         {
-            WaveController.Instance.SetShowMarkers(evt.newValue);
+            WaveController.Instance.SetSelectedLineLockValue(evt.newValue);
         }
 
         private void BuildWaveSettingSliders()
