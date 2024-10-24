@@ -23,12 +23,14 @@ public class WaveLine : MonoBehaviour
         pointCount = positionCount;
         lineLength = length;
 
+        Vector3 endPos = new Vector3(startPosition.x, startPosition.y, startPosition.z + lineLength);
+
         // Calculate positions based on start and end points
         _positions = new Vector3[positionCount];
         for (int i = 0; i < pointCount; i++)
         {
             float t = i / (float)(pointCount - 1);
-            _positions[i] = Vector3.Lerp(startPosition, endPosition, t);
+            _positions[i] = Vector3.Lerp(startPosition, endPos, t);
         }
         _lineRenderer.positionCount = positionCount;
         _lineRenderer.startWidth = diameter;

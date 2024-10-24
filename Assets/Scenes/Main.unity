@@ -336,6 +336,63 @@ MonoBehaviour:
   _enableSpeedAcceleration: 1
   _speedAccelerationFactor: 1.5
   _initPositonButton: 114
+--- !u!1001 &1449776721
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.738269
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.731845
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
+      propertyPath: m_Name
+      value: Studio Snelder - Beelden aan Zee - grote zaal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 19138ae490d93c94ca7e9e34836009d4, type: 3}
 --- !u!1 &1723558726
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,6 +652,7 @@ MonoBehaviour:
   diameterMaxValue: 5
   lineColors: []
   colorValue: 
+  showMarkers: 1
 --- !u!4 &1925082596
 Transform:
   m_ObjectHideFlags: 0
@@ -631,3 +689,4 @@ SceneRoots:
   - {fileID: 1925082596}
   - {fileID: 1911633475}
   - {fileID: 1723558730}
+  - {fileID: 1449776721}

@@ -26,6 +26,7 @@ public class WaveController : MonoBehaviour
     public Material lockedMarkerMaterial;
     
     
+    
 
     
     // Tracking
@@ -52,6 +53,7 @@ public class WaveController : MonoBehaviour
     public float lineLength = 12; // length of line in total; needs to always be a complete number of waves!
     public float lineDiameter = 2; // thickness of lines 
     public bool spawnStartEndMarkers;
+    public List<GameObject> startMarkers;
 
     [Header("Graphics")]
     public Material lineMaterial1;
@@ -95,6 +97,10 @@ public class WaveController : MonoBehaviour
     public float lengthMaxValue = 50f;
     public float diameterMinValue = 0.01f;
     public float diameterMaxValue = 5f;
+
+
+    [Header("Line Lengths")] public List<float> lineLengths;
+
     
     public  List<Color> lineColors;
 
@@ -372,10 +378,13 @@ public class WaveController : MonoBehaviour
                 int index = _startEndPoints.Keys.ToList().IndexOf(vector3);
 
                 WaveLine waveLine = _waveLines[index];
-                waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLength   );
+                waveLine.Initialize(index,pointCount, new Vector3(0,vector3.y,0),_startEndPoints [vector3], lineDiameter,lineLengths[index]   );
 
                 if (DoesWaveSettingExistForIndex(index) == false)
                 {
+                    /*float amplitudeAddPerWave = (1 - waveAmplitude) / (_startEndPoints.Count-1); // e.g. 1-0.3 = 0.7
+
+                    float cumulativeWaveAmplitude = waveAmplitude + amplitudeAddPerWave * index;*/
                     WaveSettings waveSettings = new WaveSettings(index, waveSpeed,waveAmplitude,waveLength );
                     waveLine.LoadWaveSettings(waveSettings); 
                     waveSettingsList.Add(waveSettings);
@@ -405,22 +414,20 @@ public class WaveController : MonoBehaviour
     }
 
 
-    private void DetermineStartEndPoints()
-    {
-        _startEndPoints = new Dictionary<Vector3, Vector3>();
-        Vector3 startPoint = new Vector3(0, baseHeight, 0);
-        Vector3 endPoint = new Vector3(0, baseHeight, lineLength);
-        _startEndPoints.Add(startPoint, endPoint);
+private void DetermineStartEndPoints()
+{
+    _startEndPoints = new Dictionary<Vector3, Vector3>();
 
-        // Ensure correct calculation of subsequent start and end points based on spacing
-        for (int i = 1; i < lineAmount; i++)
-        {
-            // Calculate the new start point by applying the correct spacing
-            Vector3 nextLineStartPoint = new Vector3(startPoint.x + i * lineHorizontalSpacing, startPoint.y + i * lineVerticalSpacing, startPoint.z);
-            Vector3 nextLineEndPoint = new Vector3(nextLineStartPoint.x, nextLineStartPoint.y, nextLineStartPoint.z + lineLength);
-            _startEndPoints.Add(nextLineStartPoint, nextLineEndPoint);
-        }
+    for (int i = 0; i < lineAmount; i++)
+    {
+        Vector3 lineStartMarkerPos = startMarkers[i].transform.position; 
+        // Ensure that both start and end positions have the same z and y coordinates
+        Vector3 nextLineEndPoint = new Vector3(lineStartMarkerPos.x - lineLength, lineStartMarkerPos.y, lineStartMarkerPos.z);
+
+        _startEndPoints.Add(lineStartMarkerPos, lineStartMarkerPos); 
     }
+}
+
 
 
     private void SpawnStartMarkers()
